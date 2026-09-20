@@ -1,0 +1,23 @@
+# Go build cache (sandbox workaround: GOCACHE points here) — regenerated on build
+.gocache/
+
+# Compiled binaries
+mineserver.exe
+mineserver.exe~
+*.exe
+*.test
+*.out
+
+# Server runtime data: worlds, downloaded JDKs, libraries, backups and the
+# manager config with its user agent. Everything here is created at runtime.
+data/
+
+# Go workspace / vendor
+vendor/
+
+# Editor and OS junk
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db

@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="icon" type="image/svg+xml" href="/static/favicon.svg" />
+		<title>Minecraft Manager</title>
+		<link rel="stylesheet" href="/static/style.css" />
+	</head>
+	<body>
+		<div id="app">
+			<aside id="sidebar">
+				<div class="brand">
+					<img class="brand-mark" src="/static/favicon.svg" alt="" width="30" height="30" />
+					<div>
+						<div class="brand-title">Minecraft Manager</div>
+						<div class="brand-sub" id="brandHost">loading…</div>
+					</div>
+				</div>
+				<nav id="serverList" aria-label="Servers"></nav>
+				<button class="btn primary block" id="newServerBtn">
+					<svg class="ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5.5v13M5.5 12h13" /></svg>
+					Create server
+				</button>
+			</aside>
+
+			<main id="main">
+				<div id="empty" class="empty">
+					<div class="empty-icon">
+						<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round">
+							<path d="M3.5 8L12 4l8.5 4v8L12 20l-8.5-4z" />
+							<path d="M3.5 8L12 12l8.5-4M12 12v8" />
+						</svg>
+					</div>
+					<h2>No server selected</h2>
+					<p>Pick a server on the left or create a new one.</p>
+				</div>
+
+				<div id="serverView" class="hidden">
+					<header id="serverHeader"></header>
+					<nav id="tabs" aria-label="Sections"></nav>
+
+					<section class="tab" id="tab-console">
+						<div class="console-wrap">
+							<div id="console" class="console"></div>
+							<form id="commandForm" class="command-row">
+								<span class="prompt">&gt;</span>
+								<input id="commandInput" type="text" autocomplete="off"
+									placeholder="Type a server command, e.g. say hello" />
+								<button class="btn" type="submit">
+									<svg class="ic" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 11.5L20 4.5l-6 15.5-2.6-7.4z" /><path d="M11.4 12.6L14 10" /></svg>
+									Send
+								</button>
+							</form>
+						</div>
+					</section>
+
+					<section class="tab hidden" id="tab-players">
+						<h3>Players online</h3>
+						<table class="table" id="playersTable">
+							<thead><tr><th>Player</th><th></th></tr></thead>
+							<tbody></tbody>
+						</table>
+						<p class="muted" id="playersHint"></p>
+
+						<h3>Whitelist</h3>
+						<div class="row">
+							<button class="btn" id="wlToggle">Toggle whitelist</button>
+							<input id="wlPlayer" type="text" placeholder="player name" />
+							<button class="btn" id="wlAdd">Add</button>
+							<button class="btn danger" id="wlRemove">Remove</button>
+						</div>
+						<ul class="chips" id="wlList"></ul>
+					</section>
+
+					<section class="tab hidden" id="tab-backups">
+						<div class="row">
+							<h3>Backups</h3>
+							<button class="btn" id="backupNow">Backup now</button>
+						</div>
+						<table class="table" id="backupsTable">
+							<thead><tr><th>Archive</th><th>Size</th><th>Created</th><th></th></tr></thead>
+							<tbody></tbody>
+						</table>
+						<p class="muted" id="backupsHint"></p>
+					</section>
+
+					<section class="tab hidden" id="tab-settings">
+						<form id="settingsForm" class="grid"></form>
+						<div class="row">
+							<button class="btn primary" id="saveSettings">Save settings</button>
+							<button class="btn danger" id="deleteServer">Delete server</button>
+						</div>
+					</section>
+
+					<section class="tab hidden" id="tab-deploy">
+						<div class="row">
+							<h3>systemd unit</h3>
+							<button class="btn" data-copy="deploySystemd">Copy</button>
+							<a class="btn" id="dlSystemd" href="#">Download</a>
+						</div>
+						<pre id="deploySystemd" class="code"></pre>
+						<div class="row">
+							<h3>docker-compose.yml</h3>
+							<button class="btn" data-copy="deployDocker">Copy</button>
+							<a class="btn" id="dlDocker" href="#">Download</a>
+						</div>
+						<pre id="deployDocker" class="code"></pre>
+					</section>
+				</div>
+			</main>
+		</div>
+
+		<div id="modal" class="modal hidden">
+			<div class="modal-card">
+				<div class="modal-head">
+					<h2>Create server</h2>
+					<button class="btn icon" id="modalClose" title="Close">
+						<svg class="ic" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18" /></svg>
+					</button>
+				</div>
+				<form id="createForm" class="grid">
+					<label>Name<input id="fName" type="text" placeholder="Survival" required /></label>
+					<label>Loader
+						<select id="fType"></select>
+					</label>
+					<label>Version
+						<select id="fVersion"></select>
+					</label>
+					<label id="buildWrap">Build / loader version
+						<select id="fBuild"></select>
+					</label>
+					<label>RAM (GB)<input id="fRam" type="number" min="1" max="64" value="8" /></label>
+					<label>Domain<input id="fDomain" type="text" placeholder="mc.example.com" /></label>
+					<label>Modpack URL<input id="fModpack" type="text" placeholder="https://modrinth.com/modpack/…" /></label>
+					<label class="check"><input id="fInstall" type="checkbox" checked /> Install immediately</label>
+					<label class="check"><input id="fOnline" type="checkbox" checked /> Online mode</label>
+					<label class="check"><input id="fWhitelist" type="checkbox" /> Whitelist</label>
+					<label class="check"><input id="fRestart" type="checkbox" checked /> Auto-restart on crash</label>
+					<label class="check"><input id="fDocker" type="checkbox" /> Run in Docker</label>
+				</form>
+				<p class="muted" id="versionError"></p>
+				<div class="modal-foot">
+					<button class="btn" id="modalCancel">Cancel</button>
+					<button class="btn primary" id="createSubmit">Create</button>
+				</div>
+			</div>
+		</div>
+
+		<div id="toasts"></div>
+		<script src="/static/app.js"></script>
+	</body>
+</html>
