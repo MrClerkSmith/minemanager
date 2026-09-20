@@ -12,6 +12,9 @@ mineserver.exe~
 # manager config with its user agent. Everything here is created at runtime.
 data/
 
+# Local world backups taken before cleaning data/
+worlds-backup-*.zip
+
 # Go workspace / vendor
 vendor/
 
