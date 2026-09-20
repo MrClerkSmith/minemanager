@@ -1,10 +1,14 @@
 # Go build cache (sandbox workaround: GOCACHE points here) — regenerated on build
 .gocache/
 
-# Compiled binaries
+# Compiled binaries — except the prebuilt releases committed to the repo root
+# so users can git clone and run without a Go toolchain.
 *.exe
+!minemanager-windows-amd64.exe
 *.test
 *.out
+minemanager
+!minemanager-linux-amd64
 
 # Server runtime data: worlds, downloaded JDKs, libraries, backups and the
 # manager config with its user agent. Everything here is created at runtime.

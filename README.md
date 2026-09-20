@@ -4,6 +4,10 @@ A single-binary, self-hosted control plane for Minecraft dedicated servers, with
 a built-in Web UI. Written in Go, no runtime dependencies beyond the JVM you
 already need for the game itself.
 
+**No compiler needed:** prebuilt binaries for Windows and Linux are committed to
+the repository root (`minemanager-windows-amd64.exe`, `minemanager-linux-amd64`).
+Just `git clone` and run — see [Quick start](#quick-start).
+
 ```
 Minecraft Manager
 ├── Survival          Paper 1.21.4 · 6 GB · :25565
@@ -33,6 +37,32 @@ Minecraft Manager
 
 ## Quick start
 
+### Option 1: run a prebuilt binary (no Go toolchain needed)
+
+Prebuilt binaries are committed at the repository root — clone and run:
+
+```bash
+git clone https://github.com/MrClerkSmith/minemanager.git
+cd minemanager
+```
+
+**Windows** (PowerShell):
+
+```powershell
+.\minemanager-windows-amd64.exe -data .\data -addr 127.0.0.1:8080
+```
+
+**Linux** (amd64):
+
+```bash
+chmod +x minemanager-linux-amd64
+./minemanager-linux-amd64 -data ./data -addr 127.0.0.1:8080
+```
+
+The `data/` directory (config, servers, backups) is created on first start.
+
+### Option 2: build from source
+
 ```bash
 # build (Go 1.21+)
 go build -o minemanager .
@@ -41,9 +71,84 @@ go build -o minemanager .
 ./minemanager -data ./data -addr 127.0.0.1:8080
 ```
 
+Cross-compile from any platform:
+
+```bash
+GOOS=linux   GOARCH=amd64 go build -o minemanager-linux-amd64 .
+GOOS=windows GOARCH=amd64 go build -o minemanager-windows-amd64.exe .
+```
+
 Open <http://127.0.0.1:8080>. On first start the manager seeds two example
 servers — **Survival** (Paper) and **Modded** (Forge) — in the stopped state.
 Click a server, then **Start**; the jar is downloaded and launched automatically.
+
+### Serving the panel on another IP address
+
+By default the panel listens on `127.0.0.1`, which is reachable **only from the
+host itself**. To open it to your LAN or to a remote Linux server, bind a
+different address with `-addr`:
+
+```bash
+# listen on every interface (LAN + public IP) — the common case for a VPS
+./minemanager -data ./data -addr 0.0.0.0:8080
+
+# listen on one specific interface only
+./minemanager -data ./data -addr 192.168.1.10:8080
+```
+
+Then open `http://<server-ip>:8080` from any browser. Check the reported address
+on a remote host with:
+
+```bash
+hostname -I          # Linux: shows the machine's LAN/public IPs
+ip a | grep inet
+```
+
+On Linux, open the firewall port if needed:
+
+```bash
+sudo ufw allow 8080/tcp
+# or, with firewalld:
+sudo firewall-cmd --add-port=8080/tcp --permanent && sudo firewall-cmd --reload
+```
+
+> **Warning: no built-in authentication.** The panel currently has no login, so
+> anything that can reach `-addr` can start/stop your servers and read the
+> console. Do **not** bind `0.0.0.0` on an untrusted network. Put it behind a
+> reverse proxy with HTTP Basic Auth (nginx/Apache) or restrict the port with a
+> firewall to trusted IPs only. Running as a systemd unit with
+> `127.0.0.1:8080` + an SSH tunnel is the safest option for remote access.
+
+### Running as a service on Linux
+
+For a permanent installation, run the manager under systemd so it starts on boot
+and survives disconnects. Create `/etc/systemd/system/minemanager.service`:
+
+```ini
+[Unit]
+Description=Minecraft Server Manager
+After=network.target
+
+[Service]
+Type=simple
+User=minecraft
+WorkingDirectory=/opt/minemanager
+ExecStart=/opt/minemanager/minemanager-linux-amd64 -data /opt/minemanager/data -addr 0.0.0.0:8080
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+```
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable --now minemanager
+sudo systemctl status minemanager     # verify it is running
+```
+
+The UI also generates a matching unit per server (Deploy tab → systemd) if you
+prefer to run individual game servers as units instead.
 
 Flags:
 
