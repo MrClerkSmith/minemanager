@@ -6,8 +6,8 @@ import (
 	"encoding/json"
 	"errors"
 
-	"mineserver/internal/instance"
-	"mineserver/internal/sched"
+	"minemanager/internal/instance"
+	"minemanager/internal/sched"
 )
 
 // ErrNotFound is returned for unknown server ids.

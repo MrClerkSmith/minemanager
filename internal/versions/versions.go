@@ -17,7 +17,7 @@ import (
 	"sync"
 	"time"
 
-	"mineserver/internal/config"
+	"minemanager/internal/config"
 )
 
 const cacheTTL = 15 * time.Minute

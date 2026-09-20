@@ -15,11 +15,11 @@ import (
 	"sync"
 	"time"
 
-	"mineserver/internal/config"
-	"mineserver/internal/logger"
-	"mineserver/internal/modpack"
-	"mineserver/internal/rcon"
-	"mineserver/internal/versions"
+	"minemanager/internal/config"
+	"minemanager/internal/logger"
+	"minemanager/internal/modpack"
+	"minemanager/internal/rcon"
+	"minemanager/internal/versions"
 )
 
 // State is the current lifecycle phase of an instance.

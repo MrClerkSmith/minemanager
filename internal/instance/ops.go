@@ -13,8 +13,8 @@ import (
 	"strings"
 	"time"
 
-	"mineserver/internal/backup"
-	"mineserver/internal/rcon"
+	"minemanager/internal/backup"
+	"minemanager/internal/rcon"
 )
 
 // WhitelistAction selects a whitelist operation.

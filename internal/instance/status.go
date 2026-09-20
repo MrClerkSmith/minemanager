@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
-	"mineserver/internal/backup"
-	"mineserver/internal/config"
+	"minemanager/internal/backup"
+	"minemanager/internal/config"
 )
 
 // Status is the full public view of one instance, sent to the Web UI.

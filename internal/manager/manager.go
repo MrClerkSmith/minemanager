@@ -15,11 +15,11 @@ import (
 	"sync"
 	"time"
 
-	"mineserver/internal/config"
-	"mineserver/internal/instance"
-	"mineserver/internal/modpack"
-	"mineserver/internal/sched"
-	"mineserver/internal/versions"
+	"minemanager/internal/config"
+	"minemanager/internal/instance"
+	"minemanager/internal/modpack"
+	"minemanager/internal/sched"
+	"minemanager/internal/versions"
 )
 
 // firstPort is where port allocation starts scanning.

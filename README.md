@@ -35,10 +35,10 @@ Minecraft Manager
 
 ```bash
 # build (Go 1.21+)
-go build -o mineserver .
+go build -o minemanager .
 
 # run: the data directory holds config, servers and backups
-./mineserver -data ./data -addr 127.0.0.1:8080
+./minemanager -data ./data -addr 127.0.0.1:8080
 ```
 
 Open <http://127.0.0.1:8080>. On first start the manager seeds two example

@@ -2,8 +2,6 @@
 .gocache/
 
 # Compiled binaries
-mineserver.exe
-mineserver.exe~
 *.exe
 *.test
 *.out

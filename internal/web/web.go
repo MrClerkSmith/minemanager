@@ -15,10 +15,10 @@ import (
 	"strings"
 	"time"
 
-	"mineserver/internal/config"
-	"mineserver/internal/instance"
-	"mineserver/internal/logger"
-	"mineserver/internal/manager"
+	"minemanager/internal/config"
+	"minemanager/internal/instance"
+	"minemanager/internal/logger"
+	"minemanager/internal/manager"
 )
 
 //go:embed static

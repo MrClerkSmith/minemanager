@@ -16,8 +16,8 @@ import (
 	"strings"
 	"time"
 
-	"mineserver/internal/config"
-	"mineserver/internal/versions"
+	"minemanager/internal/config"
+	"minemanager/internal/versions"
 )
 
 const downloadTimeout = 30 * time.Minute

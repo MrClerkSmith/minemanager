@@ -1,4 +1,4 @@
-// Command mineserver is a self-hosted Minecraft server manager.
+// Command minemanager is a self-hosted Minecraft server manager.
 //
 // It provisions and runs Vanilla / Paper / Purpur / Fabric / Forge servers,
 // exposes a console, RCON bridge, backups, scheduling, crash detection with
@@ -17,9 +17,9 @@ import (
 	"syscall"
 	"time"
 
-	"mineserver/internal/config"
-	"mineserver/internal/manager"
-	"mineserver/internal/web"
+	"minemanager/internal/config"
+	"minemanager/internal/manager"
+	"minemanager/internal/web"
 )
 
 func main() {
